@@ -1,0 +1,7 @@
+﻿  Zadacha_samostoyatelnaya_1.1.cpp
+C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\system.cpp(16,9): warning C4244: =: преобразование "myclass" в "int", возможна потеря данных
+C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\system.cpp(21,9): warning C4244: =: преобразование "myclass" в "int", возможна потеря данных
+C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\system.cpp(22,9): warning C4244: =: преобразование "myclass" в "int", возможна потеря данных
+C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\system.cpp(41,9): warning C4244: =: преобразование "myclass" в "int", возможна потеря данных
+C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\system.cpp(81,15): warning C4244: =: преобразование "myclass" в "int", возможна потеря данных
+  Zadacha_samostoyatelnaya_1.1.vcxproj -> C:\Users\User\source\repos\Zadacha_samostoyatelnaya_1.1\Debug\Zadacha_samostoyatelnaya_1.1.exe
