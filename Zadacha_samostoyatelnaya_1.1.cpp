@@ -6,6 +6,9 @@ int main()
 	System a(123,8),b(28,10);
 	cout << a<<endl;
 	a.changeBase(2);
-	cout << a + b;
+	cout <<a<<"+"<<b<<"="<<a + b<<endl;
+	cout << a << "-" << b << "=" << a - b<<endl;
+	cout << a << "==" << b <<": "<< (a == b)<<endl;
+	cout << a << "!=" << b << ": " << (a != b);
 	return 0;
 }

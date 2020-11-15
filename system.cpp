@@ -90,7 +90,7 @@ char value_in(int c)
 	case 33: return('X');
 	case 34: return('Y');
 	case 35: return('Z');
-	default: return(0);
+	default: return('0');
 	}
 }
 
@@ -107,7 +107,7 @@ System::System(myclass znach)
 	char c;
 	while (znach > 0)
 	{
-		c = (znach % 10) - '0';
+		c = value_in(znach % 10);
 		data = c + data;
 		znach = znach / 10;
 	}
@@ -119,7 +119,10 @@ System::System(myclass znach, myclass syst)
 	char c;
 	while (znach > 0)
 	{
-		c = (znach % 10) + 48;
+		if (znach % 10 >= syst)
+			c = value_in(syst - 1);
+		else
+			c = value_in(znach % 10);
 		data = c + data;
 		znach = znach / 10;
 	}
@@ -204,12 +207,12 @@ System System::operator+(const System& elem)
 		second = minn.data[i];
 		if (value_out(first)+value_out(second) + k >= maxx.base)
 		{
-			result = ((char)(value_out(first) + value_out(second) + k - maxx.base+48))+result;
+			result = (value_in(value_out(first) + value_out(second) + k - maxx.base))+result;
 			k = 1;
 		}
 		else
 		{
-			result = ((char)(value_out(first) + value_out(second) + k+48)) + result;
+			result = (value_in(value_out(first) + value_out(second) + k)) + result;
 			k = 0;
 		}
 	}
@@ -252,12 +255,12 @@ System System::operator-(const System& elem)
 		second = minn.data[i];
 		if (value_out(first) - value_out(second) + k < 0)
 		{
-			result = ((char)(value_out(first) - value_out(second) + k + maxx.base + 48)) + result;
+			result = (value_in(value_out(first) - value_out(second) + k + maxx.base)) + result;
 			k = -1;
 		}
 		else
 		{
-			result = ((char)(value_out(first) - value_out(second) + k + 48)) + result;
+			result = (value_in(value_out(first) - value_out(second) + k)) + result;
 			k = 0;
 		}
 	}
