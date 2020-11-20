@@ -5,7 +5,7 @@ typedef long long myclass;
 using namespace std;
 
 const int BASE_SYSTEM = 36;
-const int BASE_VALUE = 0;
+const char BASE_VALUE = '0';
 
 int value_out(char c);
 char value_in(int c);
@@ -26,9 +26,17 @@ public:
 	void clear();
 	System operator+(const System& elem);
 	System operator-(const System& elem);
+	System operator*(const System& elem);
+	System operator/(const System& elem);
+	System powe(System elem, System elem2);
+	void sort(System* mas, int size);
 	void operator=(const System& elem);
 	bool operator==(const System& elem);
 	bool operator!=(const System& elem);
+	bool operator<(const System& elem);
+	bool operator>(const System& elem);
+	bool operator<=(const System& elem);
+	bool operator>=(const System& elem);
 	friend ostream& operator<<(ostream& out, const System& elem);
 
 };

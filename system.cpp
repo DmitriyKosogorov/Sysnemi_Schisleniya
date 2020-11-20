@@ -99,7 +99,7 @@ char value_in(int c)
 
 System::System()
 {
-	data = BASE_VALUE-'0';
+	data = BASE_VALUE;
 	base = BASE_SYSTEM;
 }
 System::System(myclass znach)
@@ -112,6 +112,8 @@ System::System(myclass znach)
 		znach = znach / 10;
 	}
 	data = znach;
+	if (znach == 0)
+		data = "0";
 	base = BASE_SYSTEM;
 }
 System::System(myclass znach, myclass syst)
@@ -134,7 +136,7 @@ myclass System::getData()
 	myclass result=0;
 	int a = 1,b;
 	char g;
-	for (int i = data.length(); i >= 0; i--)
+	for (int i = data.length()-1; i >= 0; i--)
 	{
 		g = data[i];
 		b = value_out(g) * a;
@@ -267,6 +269,133 @@ System System::operator-(const System& elem)
 	tryn.data = result;
 	return tryn;
 }
+
+
+System System::operator*(const System& elem)
+{
+	System tryn(0, 10);
+	tryn.data = this->data;
+	tryn.base = this->base;
+	int a = 0, k = 0, i, j;
+	char first, second;
+	tryn.changeBase(elem.base);
+	System maxx(0, elem.base), minn(0, elem.base);
+	if (tryn.data.length() >= elem.data.length())
+	{
+		maxx.data = "0"+tryn.data;
+		minn.data = "0"+elem.data;
+	}
+	else
+	{
+		maxx.data = "0"+elem.data;
+		minn.data = "0"+tryn.data;
+	}
+	k = 0;
+
+
+	string result = "", between="",after="";
+	for (i = minn.data.length() - 1; i >= 0; i--)
+	{
+		k = 0;
+		first = minn.data[i];
+		for (j = maxx.data.length() - 1; j >= 0; j--)
+		{
+			second = maxx.data[j];
+			if (value_out(first) * value_out(second)+k >= elem.base)
+			{
+				between = (value_in((value_out(first) * value_out(second)+k) % elem.base)) + between;
+				k = (value_out(first) * value_out(second)+k) / elem.base;
+			}
+			else
+			{
+				between = (value_in(value_out(first) * value_out(second)+k)) + between;
+				k = 0;
+			}
+		}
+		k = 0;
+		for (j = 0; j < a; j++)
+			between = between + "0";
+		while (between.length() != result.length())
+		{
+			if (between.length() > result.length())
+				result = "0" + result;
+			if (between.length() < result.length())
+				between = "0" + between;
+		}
+		result = "0" + result;
+		between = "0" + between;
+		for (j = between.length() - 1; j >= 0; j--)
+		{
+			if (value_out(result[j]) + value_out(between[j]) + k >= maxx.base)
+			{
+				result[j] = (value_in(value_out(result[j]) + value_out(between[j]) + k - maxx.base));
+				k = 1;
+			}
+			else
+			{
+				result[j] = (value_in(value_out(result[j]) + value_out(between[j]) + k));
+				k = 0;
+			}
+		}
+		between = "";
+		a++;
+	}
+	while (result[0] == '0' && result.length() > 1)
+		result.erase(0, 1);
+
+	tryn.data = result;
+	return tryn;
+}
+
+System System::operator/(const System& elem)
+{
+	System tryn(0, 10),tryn1(0,10);
+	tryn.data = this->data;
+	tryn.base = this->base;
+	tryn1.data = elem.data;
+	tryn1.base = elem.base;
+
+	int a = 0, k = 0, i, j;
+	tryn.changeBase(10);
+	tryn1.changeBase(10);
+	myclass answer = tryn.getData() / tryn1.getData();
+	tryn.data = "";
+	while (answer > 0)
+	{
+		tryn.data = value_in(answer % 10) + tryn.data;
+		answer = answer / 10;
+	}
+	return tryn;
+}
+System System::powe(System elem, System elem2)
+{
+	System tryn(0, 10),tryn1(0,10);
+	tryn = elem;
+	tryn1 = elem;
+	int n = elem2.getData();
+	for (int i = 0; i < n; i++)
+		tryn = tryn * tryn1;
+	return tryn;
+}
+
+void System::sort(System* mas, int size)
+{
+	System tryn(0,10);
+	int i, j;
+	for (i = 1; i < size; i++)
+		for (j = 0; j <= i; j++)
+		{
+			if (mas[j] > mas[j + 1])
+			{
+				tryn = mas[i];
+				mas[i] = mas[i + 1];
+				mas[i + 1] = mas[i];
+			}
+		}
+		
+}
+
+
 void System::operator=(const System& elem)
 {
 	this->data = elem.data;
@@ -288,9 +417,100 @@ bool System::operator!=(const System& elem)
 	save.changeBase(elem.base);
 	return(elem.data != save.data);
 }
+bool System::operator>(const System& elem)
+{
+	System save;
+	save.data = this->data;
+	save.base = this->base;
+	save.changeBase(elem.base);
+	if (save.data.length() > elem.data.length())
+		return(true);
+	else if (save.data.length() < elem.data.length())
+		return(false);
+	else
+	{
+		for (int i = 0; i < save.data.length(); i++)
+		{
+			if (value_out(save.data[i]) > value_out(elem.data[i]))
+				return(true);
+			if (value_out(save.data[i]) < value_out(elem.data[i]))
+				return(false);
+		}
+	}
+	return(false);
+}
+bool System::operator>=(const System& elem)
+{
+	System save;
+	save.data = this->data;
+	save.base = this->base;
+	save.changeBase(elem.base);
+	if (save.data.length() > elem.data.length())
+		return(true);
+	else if (save.data.length() < elem.data.length())
+		return(false);
+	else
+	{
+		for (int i = 0; i < save.data.length(); i++)
+		{
+			if (value_out(save.data[i]) > value_out(elem.data[i]))
+				return(true);
+			if (value_out(save.data[i]) < value_out(elem.data[i]))
+				return(false);
+		}
+	}
+	return(true);
+}
+bool System::operator<(const System& elem)
+{
+	System save;
+	save.data = this->data;
+	save.base = this->base;
+	save.changeBase(elem.base);
+	if (save.data.length() > elem.data.length())
+		return(false);
+	else if (save.data.length() < elem.data.length())
+		return(true);
+	else
+	{
+		for (int i = 0; i < save.data.length(); i++)
+		{
+			if (value_out(save.data[i]) > value_out(elem.data[i]))
+				return(false);
+			if (value_out(save.data[i]) < value_out(elem.data[i]))
+				return(true);
+		}
+	}
+	return(false);
+}
+bool System::operator<=(const System& elem)
+{
+	System save;
+	save.data = this->data;
+	save.base = this->base;
+	save.changeBase(elem.base);
+	if (save.data.length() > elem.data.length())
+		return(false);
+	else if (save.data.length() < elem.data.length())
+		return(true);
+	else
+	{
+		for (int i = 0; i < save.data.length(); i++)
+		{
+			if (value_out(save.data[i]) > value_out(elem.data[i]))
+				return(false);
+			if (value_out(save.data[i]) < value_out(elem.data[i]))
+				return(true);
+		}
+	}
+	return(true);
+}
 
 ostream& operator<<(ostream& out, const System& elem)
 {
-	out << elem.data << "(" << elem.base << ")";
+	if(elem.data=="")
+		out << "0(" << elem.base << ")";
+	else
+		out << elem.data << "(" << elem.base << ")";
 	return out;
 }
