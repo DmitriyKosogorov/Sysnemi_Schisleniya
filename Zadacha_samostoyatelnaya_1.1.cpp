@@ -15,14 +15,14 @@ void sort(System* mas, int size)
 {
 	System tryn(0, 10);
 	int i, j;
-	for (i = 1; i < size; i++)
+	for (i = 1; i < size-1; i++)
 		for (j = 0; j <= i; j++)
 		{
 			if (mas[j] > mas[j + 1])
 			{
-				tryn = mas[i];
-				mas[i] = mas[i + 1];
-				mas[i + 1] = mas[i];
+				tryn = mas[j];
+				mas[j] = mas[j + 1];
+				mas[j + 1] = tryn;
 			}
 		}
 
@@ -42,16 +42,16 @@ int main()
 	cout << a << ">" << b << ": " << (a > b) << endl;
 	System c(2, 3), d(3, 10);
 	cout << c << "^" << d << ": " << powe(c,d) << endl;
-	System mas[10];
-	int i;
-	for (i = 0; i < 10; i++)
+	System mas[5];
+	int i,size=5;
+	for (i = 0; i < size; i++)
 	{
-		System g(i*2, 35 - i);
+		System g(200-6*i, 35 - i);
 		mas[i]=g;
 		cout << mas[i] << endl;;
 	}
-	sort(mas, 10);
-	for (i = 0; i < 10; i++)
+	sort(mas, size);
+	for (i = 0; i < size; i++)
 	{
 		cout << mas[i];
 	}
